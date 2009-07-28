@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-27 12:22:28 noel>
+;;; Time-stamp: <2009-07-28 14:11:51 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -28,9 +28,10 @@
 
 #lang scheme/base
 
-(require (planet schematics/schemeunit:3/test))
+(require (planet schematics/schemeunit:3/test)
+         "config-file-test.ss")
 
 (define/provide-test-suite all-tests
-;; add suites here
+  config-file-tests
 )
 

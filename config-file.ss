@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 14:10:45 noel>
+;;; Time-stamp: <2009-07-28 14:16:26 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -28,28 +28,20 @@
 
 #lang scheme/base
 
-(require (planet untyped/http-client:1))
+(require scheme/unit
+         "base.ss")
 
-(define data-collection-server-host "localhost")
-(define data-collection-server-port 4578)
+;; read-config-file : (U path string) -> config@
+(define (read-config-file file-name)
+  (define data-collection-server-host
+    (dynamic-require file-name 'data-collection-server-host))
+  (define data-collection-server-port
+    (dynamic-require file-name 'data-collection-server-port))
+  (define n-clients (dynamic-require file-name 'n-clients))
+  (define client-n-threads (dynamic-require file-name 'client-n-threads))
+  (define client-thread-start-delay (dynamic-require file-name 'client-thread-start-delay))
+  (define client-action (dynamic-require file-name 'client-action))
 
+  (unit-from-context config^))
 
-(define n-clients 5)
-
-
-(define client-n-threads 1000)
-(define client-thread-start-delay 1)
-(define client-action
-  (lambda ()
-    (begin
-      (get "http://localhost/"))))
-
-(provide
- data-collection-server-host
- data-collection-server-port
-
- n-clients
- 
- client-n-threads
- client-thread-start-delay
- client-action)
+(provide read-config-file)

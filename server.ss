@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 21:06:41 noel>
+;;; Time-stamp: <2009-07-28 21:55:00 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -46,8 +46,10 @@
   (make-data-collection-server config-file))
 
 ;; mzscheme-run-client-cmd : (U String Path) -> String
-(define (mzscheme-run-client-cmd config-file)
-  (format "/Users/noel/programming/plt-trunk/bin/mzscheme -p 'untyped/load-test:1/client' --main ~a" (path->string (path->complete-path config-file))))
+(define (mzscheme-run-client-cmd mzscheme-path config-file)
+  (format "~a/mzscheme -p 'untyped/load-test:1/client' --main ~a"
+          mzscheme-path
+          (path->string (path->complete-path config-file))))
 
 ;; run-remote-client : String String -> Channel
 (define (run-remote-client host config-file)

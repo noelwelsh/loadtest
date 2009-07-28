@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 21:45:26 noel>
+;;; Time-stamp: <2009-07-28 21:55:56 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -32,11 +32,7 @@
          "base.ss")
 
 (define (require-config file-name id)
-  (define-values (base name _) (split-path file-name))
-  (parameterize ([current-directory (if (eq? base 'relative)
-                                        (current-directory)
-                                        base)])
-    (dynamic-require (path->string name) id)))
+  (dynamic-require `(file ,file-name) id))
 
 ;; read-config-file : (U path string) -> config@
 (define (read-config-file file-name)
@@ -44,6 +40,8 @@
     (require-config file-name 'data-collection-server-host))
   (define data-collection-server-port
     (require-config file-name 'data-collection-server-port))
+  (define mzscheme-path
+    (require-config file-name 'mzscheme-path))
   (define client-hosts (require-config file-name 'client-hosts))
   (define client-n-threads (require-config file-name 'client-n-threads))
   (define client-thread-start-delay (require-config file-name 'client-thread-start-delay))

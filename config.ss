@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 20:20:57 noel>
+;;; Time-stamp: <2009-07-28 21:57:26 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -28,10 +28,14 @@
 
 #lang scheme/base
 
-(require (planet untyped/http-client:1))
+(require scheme/port
+         scheme/system
+         (planet untyped/http-client:1))
 
 (define data-collection-server-host "localhost")
 (define data-collection-server-port 4578)
+
+(define mzscheme-path (with-output-to-string (lambda () (system "which mzscheme"))))
 
 (define client-hosts (list "localhost" "localhost"))
 
@@ -46,6 +50,8 @@
  data-collection-server-host
  data-collection-server-port
 
+ mzscheme-path
+ 
  client-hosts
  
  client-n-threads

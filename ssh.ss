@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 21:33:08 noel>
+;;; Time-stamp: <2009-07-28 21:48:37 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -46,15 +46,13 @@
 (define (ssh command #:host [host "localhost"] #:username [username #f] . args)
   (match-define (list in out pid err inspect)
     (process
-     (let ([s (format "ssh ~a~a ~a ~a"
+     (format "ssh ~a~a ~a ~a"
              (if username (string-append username "@") "")
              host
              command
              (apply string-append
                     (for/list ([arg (in-list args)])
-                              (format "'~a' " arg))))])
-       (printf "~a\n" s)
-       s)))
+                              (format "'~a' " arg))))))
   (define chan (make-channel))
   (define thd
     (thread

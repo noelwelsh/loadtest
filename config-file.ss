@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 20:15:52 noel>
+;;; Time-stamp: <2009-07-28 21:45:26 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -31,16 +31,23 @@
 (require scheme/unit
          "base.ss")
 
+(define (require-config file-name id)
+  (define-values (base name _) (split-path file-name))
+  (parameterize ([current-directory (if (eq? base 'relative)
+                                        (current-directory)
+                                        base)])
+    (dynamic-require (path->string name) id)))
+
 ;; read-config-file : (U path string) -> config@
 (define (read-config-file file-name)
   (define data-collection-server-host
-    (dynamic-require file-name 'data-collection-server-host))
+    (require-config file-name 'data-collection-server-host))
   (define data-collection-server-port
-    (dynamic-require file-name 'data-collection-server-port))
-  (define client-hosts (dynamic-require file-name 'client-hosts))
-  (define client-n-threads (dynamic-require file-name 'client-n-threads))
-  (define client-thread-start-delay (dynamic-require file-name 'client-thread-start-delay))
-  (define client-action (dynamic-require file-name 'client-action))
+    (require-config file-name 'data-collection-server-port))
+  (define client-hosts (require-config file-name 'client-hosts))
+  (define client-n-threads (require-config file-name 'client-n-threads))
+  (define client-thread-start-delay (require-config file-name 'client-thread-start-delay))
+  (define client-action (require-config file-name 'client-action))
 
   (unit-from-context config^))
 

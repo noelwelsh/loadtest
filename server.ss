@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 14:56:43 noel>
+;;; Time-stamp: <2009-07-28 21:06:41 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -32,8 +32,10 @@
          scheme/tcp
          scheme/unit
          "base.ss"
-         "config-file.ss")
-;; main : (U string path) -> void
+         "config-file.ss"
+         "ssh.ss")
+
+;; main : (U String Path) -> Void
 (define (main config-file)
   (define-values/invoke-unit (read-config-file config-file)
     (import)
@@ -41,14 +43,28 @@
   (define-values/invoke-unit server@
     (import config^)
     (export server^))
-  (make-data-collection-server))
+  (make-data-collection-server config-file))
+
+;; mzscheme-run-client-cmd : (U String Path) -> String
+(define (mzscheme-run-client-cmd config-file)
+  (format "/Users/noel/programming/plt-trunk/bin/mzscheme -p 'untyped/load-test:1/client' --main ~a" (path->string (path->complete-path config-file))))
+
+;; run-remote-client : String String -> Channel
+(define (run-remote-client host config-file)
+  (ssh (mzscheme-run-client-cmd config-file) #:host host))
 
 
 (define-unit server@
   (import config^)
   (export server^)
-  
-  (define (make-data-collection-server)
+
+  ;; make-data-collection-server : (U String Path) -> Void
+  (define (make-data-collection-server config-file)
+    (define n-clients (length client-hosts))
+    (define ssh-channels
+      (map (lambda (host)
+             (run-remote-client host config-file))
+           client-hosts))
     (define listener (tcp-listen data-collection-server-port))
     (define mailbox (thread-receive-evt))
   
@@ -57,9 +73,14 @@
           (begin
             (tcp-close listener)
             (report-results results))
-          (match (sync (tcp-accept-evt listener))
+          (match (apply sync (tcp-accept-evt listener) ssh-channels)
                  [(list in out)
-                  (loop (add1 n-results) (cons (read in) results))]))))
+                  (loop (add1 n-results) (cons (read in) results))]
+                 [(struct result (exit-code out err))
+                  (printf "SSH Process returned with exit code ~a\n" exit-code)
+                  (printf "stdout:\n~a\n" out)
+                  (printf "stderr:\n~a\n" err)
+                  (loop n-results results)]))))
 
   (define (report-results results)
     (display results))

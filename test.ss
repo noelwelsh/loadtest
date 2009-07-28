@@ -5,10 +5,4 @@
 
 (define config "config.ss")
 
-(define server (thread (lambda () (server:main config))))
-
-(for ([i (in-range 5)])
-     (printf "Starting client ~a\n" i)
-     (thread (lambda () (client:main config))))
-
-(sync server)
+(server:main config)

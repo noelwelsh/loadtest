@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 21:55:00 noel>
+;;; Time-stamp: <2009-07-28 21:59:23 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -51,9 +51,9 @@
           mzscheme-path
           (path->string (path->complete-path config-file))))
 
-;; run-remote-client : String String -> Channel
-(define (run-remote-client host config-file)
-  (ssh (mzscheme-run-client-cmd config-file) #:host host))
+;; run-remote-client : String String String -> Channel
+(define (run-remote-client host mzscheme-path config-file)
+  (ssh (mzscheme-run-client-cmd mzscheme-path config-file) #:host host))
 
 
 (define-unit server@
@@ -65,7 +65,7 @@
     (define n-clients (length client-hosts))
     (define ssh-channels
       (map (lambda (host)
-             (run-remote-client host config-file))
+             (run-remote-client host mzscheme-path config-file))
            client-hosts))
     (define listener (tcp-listen data-collection-server-port))
     (define mailbox (thread-receive-evt))

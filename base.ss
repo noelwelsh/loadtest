@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 14:45:04 noel>
+;;; Time-stamp: <2009-07-28 20:09:14 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -50,13 +50,13 @@
    ))
 
 (define-signature config^
-  (data-collection-server-host ;; string
-   data-collection-server-port ;; integer
+  (data-collection-server-host ;; String
+   data-collection-server-port ;; Integer
 
-   n-clients ;; integer
+   client-hosts ;; (Listof String)
 
-   client-n-threads ;; integer
-   client-thread-start-delay ;; number
+   client-n-threads ;; Integer
+   client-thread-start-delay ;; Number
    client-action ;; (-> TimedResponse)
    ))
 

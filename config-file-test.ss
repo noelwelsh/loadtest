@@ -12,7 +12,7 @@
      (define-values/invoke-unit config (import) (export config^))
      (check string=? data-collection-server-host "localhost")
      (check = data-collection-server-port 4578)
-     (check = n-clients 5)
+     (check-equal? client-hosts (list "localhost" "localhost"))
      (check = client-n-threads 50)
      (check = client-thread-start-delay 1)))
   )

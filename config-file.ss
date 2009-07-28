@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 14:16:26 noel>
+;;; Time-stamp: <2009-07-28 20:15:52 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -37,7 +37,7 @@
     (dynamic-require file-name 'data-collection-server-host))
   (define data-collection-server-port
     (dynamic-require file-name 'data-collection-server-port))
-  (define n-clients (dynamic-require file-name 'n-clients))
+  (define client-hosts (dynamic-require file-name 'client-hosts))
   (define client-n-threads (dynamic-require file-name 'client-n-threads))
   (define client-thread-start-delay (dynamic-require file-name 'client-thread-start-delay))
   (define client-action (dynamic-require file-name 'client-action))

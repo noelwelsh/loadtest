@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 14:49:06 noel>
+;;; Time-stamp: <2009-07-28 20:20:57 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -33,9 +33,7 @@
 (define data-collection-server-host "localhost")
 (define data-collection-server-port 4578)
 
-
-(define n-clients 5)
-
+(define client-hosts (list "localhost" "localhost"))
 
 (define client-n-threads 50)
 (define client-thread-start-delay 1)
@@ -48,7 +46,7 @@
  data-collection-server-host
  data-collection-server-port
 
- n-clients
+ client-hosts
  
  client-n-threads
  client-thread-start-delay

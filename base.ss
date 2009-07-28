@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 14:16:06 noel>
+;;; Time-stamp: <2009-07-28 14:45:04 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -41,6 +41,14 @@
 (define-struct success (time) #:prefab)
 
 
+(define-signature client^
+  (make-client-server ;; (-> Void)
+   ))
+
+(define-signature server^
+  (make-data-collection-server ;; (-> Void)
+   ))
+
 (define-signature config^
   (data-collection-server-host ;; string
    data-collection-server-port ;; integer
@@ -58,4 +66,6 @@
  (struct-out error)
  (struct-out success)
 
+ client^
+ server^
  config^)

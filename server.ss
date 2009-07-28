@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-27 13:25:34 noel>
+;;; Time-stamp: <2009-07-28 14:44:48 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -30,24 +30,41 @@
 
 (require scheme/match
          scheme/tcp
+         scheme/unit
          "base.ss"
-         "config.ss")
+         "config-file.ss")
+;; main : (U string path) -> void
+(define (main config-file)
+  (define-values/invoke-unit (read-config-file config-file)
+    (import)
+    (export config^))
+  (define-values/invoke-unit server@
+    (import config^)
+    (export client^))
+  (make-data-collection-server))
 
-(define (make-data-collection-server)
-  (define listener (tcp-listen data-collection-server-port))
-  (define mailbox (thread-receive-evt))
+
+(define-unit server@
+  (import config^)
+  (export server^)
   
-  (let loop ([n-results 0] [results null])
-    (if (= n-results n-clients)
-        (begin
-          (tcp-close listener)
-          (report-results results))
-        (match (sync (tcp-accept-evt listener))
-          [(list in out)
-           (loop (add1 n-results) (cons (read in) results))]))))
+  (define (make-data-collection-server)
+    (define listener (tcp-listen data-collection-server-port))
+    (define mailbox (thread-receive-evt))
+  
+    (let loop ([n-results 0] [results null])
+      (if (= n-results n-clients)
+          (begin
+            (tcp-close listener)
+            (report-results results))
+          (match (sync (tcp-accept-evt listener))
+                 [(list in out)
+                  (loop (add1 n-results) (cons (read in) results))]))))
 
-(define (report-results results)
-  (display results))
+  (define (report-results results)
+    (display results))
+  )
 
 
-(provide make-data-collection-server)
+(provide main
+         server@)

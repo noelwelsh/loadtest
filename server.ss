@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 21:59:23 noel>
+;;; Time-stamp: <2009-07-28 22:07:50 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -68,14 +68,14 @@
              (run-remote-client host mzscheme-path config-file))
            client-hosts))
     (define listener (tcp-listen data-collection-server-port))
-    (define mailbox (thread-receive-evt))
+    (define accept-evt (tcp-accept-evt listener))
   
     (let loop ([n-results 0] [results null])
       (if (= n-results n-clients)
           (begin
             (tcp-close listener)
             (report-results results))
-          (match (apply sync (tcp-accept-evt listener) ssh-channels)
+          (match (apply sync accept-evt ssh-channels)
                  [(list in out)
                   (loop (add1 n-results) (cons (read in) results))]
                  [(struct result (exit-code out err))

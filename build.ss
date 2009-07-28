@@ -17,7 +17,7 @@
   (dynamic-require "test.ss" #f))
 
 (define-task planet-install
-  (functional-test)
+  (test)
   (when (file-exists? "load-test.plt")
     (delete-file "load-test.plt"))
   (make-directory* "build/load-test")

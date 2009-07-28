@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 16:30:30 noel>
+;;; Time-stamp: <2009-07-28 17:12:47 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -28,12 +28,26 @@
 
 #lang scheme/base
 
-(require (planet schematics/schemeunit:3/test)
-         "config-file-test.ss"
-         "ssh-test.ss")
+(require scheme/port
+         scheme/system
+         (planet schematics/schemeunit:3/test)
+         "ssh.ss")
 
-(define/provide-test-suite all-tests
-  config-file-tests
-  ssh-tests
-)
+;; You need to have public key based login on your local machine for this to work.
+;; The following should work to set this up:
+;; - Run ssh-keygen. Give it a good password
+;; - cd .ssh ; cat id_rsa.pub > authorized_keys
+;; - ssh-add id_rsa
+;;
+;; You must protect the id_rsa file -- anyone who can access
+;; it (and knowns your password) can impersonate you.
 
+(define/provide-test-suite ssh-tests
+  (test-case
+   "ssh correctly captures stdout"
+   (check-equal? (result-out (channel-get (ssh "uname")))
+                 (with-output-to-bytes (lambda () (system "uname")))))
+  (test-case
+   "ssh captures exit code"
+   (check-false (zero? (result-exit-code (channel-get (ssh "foo"))))))
+  )

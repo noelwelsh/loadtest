@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 22:07:50 noel>
+;;; Time-stamp: <2009-07-28 22:13:51 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -69,14 +69,17 @@
            client-hosts))
     (define listener (tcp-listen data-collection-server-port))
     (define accept-evt (tcp-accept-evt listener))
-  
+
+    (display "Clients started. Waiting for results.\n")
     (let loop ([n-results 0] [results null])
       (if (= n-results n-clients)
           (begin
+            (display "All results received.\n")
             (tcp-close listener)
             (report-results results))
           (match (apply sync accept-evt ssh-channels)
                  [(list in out)
+                  (display "Results received.\n")
                   (loop (add1 n-results) (cons (read in) results))]
                  [(struct result (exit-code out err))
                   (printf "SSH Process returned with exit code ~a\n" exit-code)

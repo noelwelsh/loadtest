@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 21:57:26 noel>
+;;; Time-stamp: <2009-07-28 22:17:40 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -28,14 +28,23 @@
 
 #lang scheme/base
 
-(require scheme/port
+(require scheme/path
+         scheme/port
          scheme/system
          (planet untyped/http-client:1))
 
 (define data-collection-server-host "localhost")
 (define data-collection-server-port 4578)
 
-(define mzscheme-path (with-output-to-string (lambda () (system "which mzscheme"))))
+(define mzscheme-path
+  (let ([str (with-output-to-string (lambda () (system "which mzscheme")))])
+    (if (zero? (string-length str))
+        ;; We're running in a noninteractive shell and
+        ;; relying on the server to send us the path
+        str
+        ;; String will contain a newline that we must trim,
+        ;; and then take just the path
+        (path-only (substring str 0 (sub1 (string-length str)))))))
 
 (define client-hosts (list "localhost" "localhost"))
 

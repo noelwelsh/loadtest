@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 14:10:45 noel>
+;;; Time-stamp: <2009-07-28 14:49:06 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -37,7 +37,7 @@
 (define n-clients 5)
 
 
-(define client-n-threads 1000)
+(define client-n-threads 50)
 (define client-thread-start-delay 1)
 (define client-action
   (lambda ()

@@ -13,6 +13,6 @@
      (check string=? data-collection-server-host "localhost")
      (check = data-collection-server-port 4578)
      (check = n-clients 5)
-     (check = client-n-threads 1000)
+     (check = client-n-threads 50)
      (check = client-thread-start-delay 1)))
   )

@@ -1,13 +1,14 @@
 #lang scheme/base
 
-(require "config.ss"
-         "client.ss"
-         "server.ss")
+(require (prefix-in client: "client.ss")
+         (prefix-in server: "server.ss"))
 
-(define data-collection-server (thread make-data-collection-server))
+(define config "config.ss")
 
-(for ([i (in-range n-clients)])
+(define server (thread (lambda () (server:main config))))
+
+(for ([i (in-range 5)])
      (printf "Starting client ~a\n" i)
-     (thread make-client-server))
+     (thread (lambda () (client:main config))))
 
-(sync data-collection-server)
+(sync server)

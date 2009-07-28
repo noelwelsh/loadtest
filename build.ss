@@ -12,8 +12,12 @@
   (compile)
   (action:test "all-tests.ss" 'all-tests))
 
-(define-task planet-install
+(define-task functional-test
   (test)
+  (dynamic-require "test.ss" #f))
+
+(define-task planet-install
+  (functional-test)
   (when (file-exists? "load-test.plt")
     (delete-file "load-test.plt"))
   (make-directory* "build/load-test")

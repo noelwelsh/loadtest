@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 14:44:48 noel>
+;;; Time-stamp: <2009-07-28 14:56:43 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -40,7 +40,7 @@
     (export config^))
   (define-values/invoke-unit server@
     (import config^)
-    (export client^))
+    (export server^))
   (make-data-collection-server))
 
 

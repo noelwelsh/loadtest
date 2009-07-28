@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 14:44:41 noel>
+;;; Time-stamp: <2009-07-28 14:56:25 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -71,6 +71,9 @@
               [(eq? evt mailbox)
                (loop i (cons (thread-receive) results) (add1 n-results) alarm mailbox)]))))))
 
+  (define (make-alarm)
+    (alarm-evt (+ (current-inexact-milliseconds) (* 1000 client-thread-start-delay))))
+  
   (define (make-action-thread parent action)
     (thread
      (lambda ()

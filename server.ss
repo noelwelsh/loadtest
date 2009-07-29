@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 22:13:51 noel>
+;;; Time-stamp: <2009-07-29 10:52:27 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -80,7 +80,7 @@
           (match (apply sync accept-evt ssh-channels)
                  [(list in out)
                   (display "Results received.\n")
-                  (loop (add1 n-results) (cons (read in) results))]
+                  (loop (add1 n-results) (cons (read-all-bytes in) results))]
                  [(struct result (exit-code out err))
                   (printf "SSH Process returned with exit code ~a\n" exit-code)
                   (printf "stdout:\n~a\n" out)

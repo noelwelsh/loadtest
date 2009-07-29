@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 21:48:37 noel>
+;;; Time-stamp: <2009-07-29 10:52:17 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -82,4 +82,6 @@
 
 (provide
  (struct-out result)
- ssh)
+ ssh
+
+ read-all-bytes)

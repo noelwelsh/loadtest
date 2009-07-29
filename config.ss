@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 22:17:40 noel>
+;;; Time-stamp: <2009-07-29 09:51:06 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -48,8 +48,15 @@
 
 (define client-hosts (list "localhost" "localhost"))
 
+;; How many threads in total do we want per client
 (define client-n-threads 50)
+;; How many clients threads may be running at the same time
+(define client-max-concurrency 10)
+;; How many seconds do we wait between starting threads
+;; (assuming we haven't hit the client-max-concurrency
+;; limit)
 (define client-thread-start-delay 1)
+;; What do the client threads do
 (define client-action
   (lambda ()
     (begin
@@ -64,5 +71,6 @@
  client-hosts
  
  client-n-threads
+ client-max-concurrency
  client-thread-start-delay
  client-action)

@@ -14,5 +14,6 @@
      (check = data-collection-server-port 4578)
      (check-equal? client-hosts (list "localhost" "localhost"))
      (check = client-n-threads 50)
+     (check = client-max-concurrency 10)
      (check = client-thread-start-delay 1)))
   )

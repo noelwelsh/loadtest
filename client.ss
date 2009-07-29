@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 14:56:25 noel>
+;;; Time-stamp: <2009-07-29 10:04:32 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -54,22 +54,42 @@
     (define me (current-thread))
 
     (send-results-to-server
-     (let loop ([i client-n-threads]
+     (let loop ([threads-to-start client-n-threads]
+                [threads-running 0]
                 [results null]
                 [n-results 0]
                 [alarm (make-alarm)]
                 [mailbox (thread-receive-evt)])
-       (if (= n-results client-n-threads)
-           results
-           (let ([evt (sync alarm mailbox)])
-             (cond 
-              [(eq? evt alarm)
-               (make-action-thread me client-action)
-               (if (zero? (sub1 i))
-                   (loop 0 results n-results never-evt mailbox)
-                   (loop (sub1 i) results n-results (make-alarm) mailbox))]
-              [(eq? evt mailbox)
-               (loop i (cons (thread-receive) results) (add1 n-results) alarm mailbox)]))))))
+       (cond
+        [(= n-results client-n-threads)
+         results]
+        [(= threads-running client-max-concurrency)
+         (let ([result (thread-receive)])
+           (loop threads-to-start
+                 (sub1 threads-running)
+                 (cons result results)
+                 (add1 n-results)
+                 alarm
+                 mailbox))]
+        [else
+         (let ([evt (sync alarm mailbox)])
+           (cond 
+            [(eq? evt alarm)
+             (make-action-thread me client-action)
+             (loop (sub1 threads-to-start)
+                   (add1 threads-running)
+                   results
+                   n-results
+                   (if (zero? (sub1 threads-to-start)) never-evt (make-alarm))
+                   mailbox)]
+            [(eq? evt mailbox)
+             (let ([result (thread-receive)])
+               (loop threads-to-start
+                     (sub1 threads-running)
+                     (cons result results)
+                     (add1 n-results)
+                     alarm
+                     mailbox))]))]))))
 
   (define (make-alarm)
     (alarm-evt (+ (current-inexact-milliseconds) (* 1000 client-thread-start-delay))))

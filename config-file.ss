@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 21:55:56 noel>
+;;; Time-stamp: <2009-07-29 09:51:38 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -44,6 +44,7 @@
     (require-config file-name 'mzscheme-path))
   (define client-hosts (require-config file-name 'client-hosts))
   (define client-n-threads (require-config file-name 'client-n-threads))
+  (define client-max-concurrency (require-config file-name 'client-max-concurrency))
   (define client-thread-start-delay (require-config file-name 'client-thread-start-delay))
   (define client-action (require-config file-name 'client-action))
 

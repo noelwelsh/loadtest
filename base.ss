@@ -1,5 +1,5 @@
 ;;;
-;;; Time-stamp: <2009-07-28 21:56:45 noel>
+;;; Time-stamp: <2009-07-29 09:49:36 noel>
 ;;;
 ;;; Copyright (C) by Noel Welsh. 
 ;;;
@@ -58,6 +58,7 @@
    client-hosts ;; (Listof String)
 
    client-n-threads ;; Integer
+   client-max-concurrency ;; Integer
    client-thread-start-delay ;; Number
    client-action ;; (-> TimedResponse)
    ))
